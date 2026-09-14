@@ -1,0 +1,3 @@
+# VOID
+
+Initial repository setup.

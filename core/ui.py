@@ -7,7 +7,6 @@ from rich.table import Table
 from rich.prompt import Prompt
 from rich.align import Align
 from rich import box
-from core.config import CONFIG
 
 console = Console()
 
@@ -29,7 +28,6 @@ def clear_screen():
 def draw_header():
     clear_screen()
     console.print(Align.center(BANNER))
-    console.print(Align.center(f"[bold black on red] :: SYSTEM ONLINE :: VOID TERMINAL v{CONFIG['version']} :: [/bold black on red]\n"))
 
 def module_header(name, category):
     draw_header()
@@ -41,9 +39,7 @@ def pause():
 def menu_table(rows):
     table = Table(box=box.ROUNDED, border_style="red", header_style="bold bright_red", expand=True)
     table.add_column("ID", width=5, justify="center", style="bold red")
-    table.add_column("Tool", width=28, style="bold white")
-    table.add_column("Category", width=18, style="bright_red")
-    table.add_column("Description", style="dim white")
+    table.add_column("Tool", style="bold white")
     for row in rows:
-        table.add_row(*row)
+        table.add_row(row[0], row[1])
     return table

@@ -38,8 +38,8 @@ def pause():
 
 def menu_table(rows):
     table = Table(box=box.ROUNDED, border_style="red", header_style="bold bright_red", expand=True)
-    table.add_column("ID", width=5, justify="center", style="bold red")
-    table.add_column("Tool", style="bold white")
+    table.add_column("ID", width=4, max_width=4, no_wrap=True, justify="center", style="bold red")
+    table.add_column("Tool", ratio=1, style="bold white")
     for row in rows:
         table.add_row(row[0], row[1])
     return table

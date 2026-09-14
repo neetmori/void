@@ -229,7 +229,6 @@ FILE_TOOLS = {
     "02": exif_viewer
 }
 
-
 TRAINING_ROWS = [
     ("01", "Local Credential Test", "Local Only", "Credential workflow against localhost only"),
     ("02", "Local Password Spray", "Local Only", "Password iteration against localhost only"),
@@ -255,8 +254,7 @@ def run_submenu(title, rows, tools):
     while True:
         draw_header()
         console.print(Panel(menu_table(rows), title=f"[bold white] VOID [/bold white][bold red]:: {title} ::[/bold red]", border_style="bright_red"))
-        option = Prompt.ask("
-[bold white]void[/bold white][bold red]@security[/bold red][bold white]:~$[/bold white]").strip().lower()
+        option = Prompt.ask("\n[bold white]void[/bold white][bold red]@security[/bold red][bold white]:~$[/bold white]").strip().lower()
         if option in {"00", "back", "b"}:
             return
         function = tools.get(option)
@@ -264,8 +262,7 @@ def run_submenu(title, rows, tools):
             try:
                 function()
             except KeyboardInterrupt:
-                console.print("
-[yellow]Operation cancelled.[/yellow]")
+                console.print("\n[yellow]Operation cancelled.[/yellow]")
                 time.sleep(1)
         else:
             console.print("[bold red][!] Unknown command.[/bold red]")
@@ -275,12 +272,9 @@ def main():
     while True:
         draw_header()
         console.print(Panel(menu_table(ROWS), title="[bold white] VOID [/bold white][bold red]:: TOOLKIT ::[/bold red]", subtitle="[dim white]Made by unbeau[/dim white]", border_style="bright_red"))
-        option = Prompt.ask("
-[bold white]void[/bold white][bold red]@security[/bold red][bold white]:~$[/bold white]").strip().lower()
+        option = Prompt.ask("\n[bold white]void[/bold white][bold red]@security[/bold red][bold white]:~$[/bold white]").strip().lower()
         if option in {"00", "exit", "quit", "q"}:
-            console.print("
-[bold white]VOID[/bold white] [red]session terminated.[/red]
-")
+            console.print("\n[bold white]VOID[/bold white] [red]session terminated.[/red]\n")
             return
         if option == "01":
             run_submenu("LOOKUPS & OSINT", LOOKUP_ROWS, LOOKUP_TOOLS)

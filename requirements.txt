@@ -1,0 +1,6 @@
+rich
+requests
+dnspython
+python-whois
+Pillow
+phonenumbers

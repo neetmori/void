@@ -87,11 +87,6 @@ from modules.lookup.dnssec_lookup import run as dnssec_lookup
 from modules.lookup.favicon_hash import run as favicon_hash
 from modules.lookup.security_txt_lookup import run as security_txt_lookup
 
-from modules.training.credential_stuffing_demo import run as credential_stuffing_demo
-from modules.training.password_spraying_demo import run as password_spraying_demo
-from modules.training.reverse_shell_demo import run as reverse_shell_demo
-from modules.training.credential_stealer_demo import run as credential_stealer_demo
-from modules.training.sqli_exploitation_demo import run as sqli_exploitation_demo
 from modules.training.info_stealer_placeholder import run as info_stealer_placeholder
 
 
@@ -103,7 +98,6 @@ ROWS = [
     ("05", "File Analysis", "Category", "File hashes and EXIF metadata"),
     ("06", "Local Testing", "Category", "Localhost-only testing tools"),
     ("07", "System", "Category", "Local system information"),
-    ("08", "Training / Disabled", "Category", "Non-operational training examples"),
     ("09", "Info Stealer", "Module", "Info Stealer menu entry"),
     ("00", "Exit", "System", "Close VOID"),
 ]
@@ -219,24 +213,6 @@ FILE_TOOLS = {
 }
 
 
-TRAINING_ROWS = [
-    ("01", "Local Credential Test", "Local Only", "Credential workflow against localhost only"),
-    ("02", "Local Password Spray", "Local Only", "Password iteration against localhost only"),
-    ("03", "Mock Shell", "Local Only", "No sockets or OS command execution"),
-    ("04", "Credential Storage Training", "Local Only", "Synthetic credentials only"),
-    ("05", "Local SQL Training", "Local Only", "Local SQLite defensive query training"),
-    ("00", "Back", "System", "Return to main menu"),
-]
-
-TRAINING_TOOLS = {
-    "01": credential_stuffing_demo,
-    "02": password_spraying_demo,
-    "03": reverse_shell_demo,
-    "04": credential_stealer_demo,
-    "05": sqli_exploitation_demo,
-}
-
-
 def run_submenu(title, rows, tools):
     while True:
         draw_header()
@@ -294,8 +270,6 @@ def main():
             local_stress()
         elif option == "07":
             system_info()
-        elif option == "08":
-            run_submenu("TRAINING / DISABLED", TRAINING_ROWS, TRAINING_TOOLS)
         elif option == "09":
             info_stealer_placeholder()
         else:

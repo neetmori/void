@@ -253,7 +253,7 @@ TOOLS = {}
 def run_submenu(title, rows, tools):
     while True:
         draw_header()
-        console.print(Panel(menu_table(rows), title=f"[bold white] VOID [/bold white][bold red]:: {title} ::[/bold red]", subtitle="[dim white]Made by unbeau[/dim white]", border_style="bright_red"))
+        console.print(Panel(menu_table(rows), title=f"[bold white] VOID [/bold white][bold red]:: {title} ::[/bold red]", subtitle="[bold white]Made by unbeau[/bold white]", border_style="bright_red"))
         option = Prompt.ask("\n[bold white]void[/bold white][bold red]@security[/bold red][bold white]:~$[/bold white]").strip().lower()
         if option in {"00", "back", "b"}:
             return
@@ -271,7 +271,7 @@ def run_submenu(title, rows, tools):
 def main():
     while True:
         draw_header()
-        console.print(Panel(menu_table(ROWS), title="[bold white] VOID [/bold white][bold red]:: TOOLKIT ::[/bold red]", subtitle="[dim white]Made by unbeau[/dim white]", border_style="bright_red"))
+        console.print(Panel(menu_table(ROWS), title="[bold white] VOID [/bold white][bold red]:: TOOLKIT ::[/bold red]", subtitle="[bold white]Made by unbeau[/bold white]", border_style="bright_red"))
         option = Prompt.ask("\n[bold white]void[/bold white][bold red]@security[/bold red][bold white]:~$[/bold white]").strip().lower()
         if option in {"00", "exit", "quit", "q"}:
             console.print("\n[bold white]VOID[/bold white] [red]session terminated.[/red]\n")

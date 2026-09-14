@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 MADE_BY = "Made by unbeau"
 
 import importlib
@@ -10,7 +9,6 @@ REQUIRED_PACKAGES = {
     "rich": "rich",
     "requests": "requests",
     "dns": "dnspython",
-    "whois": "python-whois",
     "PIL": "Pillow",
     "phonenumbers": "phonenumbers",
 }
@@ -31,13 +29,7 @@ def ensure_dependencies():
     print("Missing packages:", ", ".join(missing))
 
     try:
-        subprocess.check_call([
-            sys.executable,
-            "-m",
-            "pip",
-            "install",
-            *missing,
-        ])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", *missing])
     except subprocess.CalledProcessError:
         print()
         print("Automatic dependency installation failed.")
@@ -53,9 +45,7 @@ from rich.prompt import Prompt
 from core.ui import console, draw_header, menu_table
 
 from modules.osint.ip_lookup import run as ip_lookup
-from modules.osint.whois_lookup import run as whois_lookup
 from modules.osint.email_lookup import run as email_lookup
-from modules.osint.mac_lookup import run as mac_lookup
 
 from modules.network.reverse_dns import run as reverse_dns
 from modules.network.port_scanner import run as port_scanner
@@ -120,45 +110,41 @@ ROWS = [
 
 
 LOOKUP_ROWS = [
-    ("01", "IP Lookup", "OSINT", "Public IP information"),
-    ("02", "ASN Lookup", "OSINT", "ASN and organization information"),
-    ("03", "WHOIS Lookup", "OSINT", "Domain registration metadata"),
-    ("04", "Email Lookup", "OSINT", "Public email/domain intelligence"),
+    ("01", "IP Lookup", "OSINT", "Public IP intelligence"),
+    ("02", "ASN Lookup", "OSINT", "ASN, prefix and organization information"),
+    ("03", "RDAP Lookup", "OSINT", "Domain, IP and ASN registration data"),
+    ("04", "Email Lookup", "OSINT", "Public email and domain intelligence"),
     ("05", "Username Lookup", "OSINT", "Public profile checks"),
-    ("06", "GitHub User Lookup", "OSINT", "Public GitHub metadata"),
-    ("07", "MAC Vendor Lookup", "OSINT", "MAC/OUI vendor information"),
-    ("08", "Certificate Transparency", "OSINT", "Public certificate names"),
-    ("09", "Phone Number Parser", "OSINT", "Parse public number metadata"),
-    ("10", "Reputation Lookup", "OSINT", "Public reputation checks"),
-    ("11", "RDAP Lookup", "OSINT", "Public registration data"),
-    ("12", "Gravatar Lookup", "OSINT", "Public Gravatar metadata"),
+    ("06", "GitHub User Lookup", "OSINT", "Public GitHub account metadata"),
+    ("07", "Certificate Transparency", "OSINT", "Public certificate names and issuers"),
+    ("08", "Phone Number Parser", "OSINT", "Number format, carrier and region metadata"),
+    ("09", "Reputation Lookup", "OSINT", "Public reputation sources"),
+    ("10", "Gravatar Lookup", "OSINT", "Public Gravatar profile metadata"),
     ("00", "Back", "System", "Return to main menu"),
 ]
 
 LOOKUP_TOOLS = {
     "01": ip_lookup,
     "02": asn_lookup,
-    "03": whois_lookup,
+    "03": rdap_lookup,
     "04": email_lookup,
     "05": username_lookup,
     "06": github_user_lookup,
-    "07": mac_lookup,
-    "08": certificate_transparency,
-    "09": phone_parser,
-    "10": reputation_lookup,
-    "11": rdap_lookup,
-    "12": gravatar_lookup,
+    "07": certificate_transparency,
+    "08": phone_parser,
+    "09": reputation_lookup,
+    "10": gravatar_lookup,
 }
 
 
 NETWORK_ROWS = [
-    ("01", "Reverse DNS", "Network", "Resolve IP to hostname"),
-    ("02", "Advanced DNS", "Network", "A, AAAA, CNAME, MX, TXT, NS, SOA and CAA"),
-    ("03", "DNSSEC Lookup", "Network", "DNSKEY and DS records"),
+    ("01", "Reverse DNS", "Network", "Resolve IP addresses to hostnames"),
+    ("02", "Advanced DNS", "Network", "Inspect public DNS record sets"),
+    ("03", "DNSSEC Lookup", "Network", "Inspect DNSSEC records and delegation"),
     ("04", "TCP Port Scanner", "Network", "Check selected TCP ports"),
-    ("05", "CIDR Calculator", "Network", "Calculate subnet information"),
-    ("06", "Ping Monitor", "Network", "Run a limited ping test"),
-    ("07", "Traceroute", "Network", "Display network path"),
+    ("05", "CIDR Calculator", "Network", "Calculate IPv4 and IPv6 subnet information"),
+    ("06", "Ping Monitor", "Network", "Run a limited connectivity test"),
+    ("07", "Traceroute", "Network", "Display the network path"),
     ("00", "Back", "System", "Return to main menu"),
 ]
 
@@ -174,14 +160,14 @@ NETWORK_TOOLS = {
 
 
 WEB_ROWS = [
-    ("01", "HTTP Status Check", "Web", "Check HTTP response and latency"),
-    ("02", "Header Analyzer", "Web", "Inspect HTTP security headers"),
-    ("03", "SSL/TLS Inspector", "Web", "Inspect TLS certificate and cipher"),
-    ("04", "robots.txt Analyzer", "Web", "Retrieve robots.txt"),
-    ("05", "Sitemap Finder", "Web", "Check common sitemap locations"),
-    ("06", "URL Parser", "Web", "Parse URL components"),
+    ("01", "HTTP Status Check", "Web", "Response, latency and redirect summary"),
+    ("02", "Header Analyzer", "Web", "HTTP headers, cookies and security posture"),
+    ("03", "SSL/TLS Inspector", "Web", "Certificate, protocol and cipher information"),
+    ("04", "robots.txt Analyzer", "Web", "Retrieve and summarize robots.txt"),
+    ("05", "Sitemap Finder", "Web", "Discover published sitemap locations"),
+    ("06", "URL Parser", "Web", "Parse and normalize URL components"),
     ("07", "Subdomain Resolver", "Web", "Resolve a limited subdomain list"),
-    ("08", "Redirect Lookup", "Web", "Display HTTP redirect chain"),
+    ("08", "Redirect Lookup", "Web", "Display and classify redirect chains"),
     ("09", "Technology Lookup", "Web", "Infer technologies from public signatures"),
     ("10", "Favicon Hash", "Web", "Calculate public favicon fingerprints"),
     ("11", "security.txt Lookup", "Web", "Retrieve published security contacts"),
@@ -205,10 +191,10 @@ WEB_TOOLS = {
 
 CRYPTO_ROWS = [
     ("01", "Hash Analyzer", "Crypto", "Identify common hash formats"),
-    ("02", "Hash Generator", "Crypto", "Generate common hashes"),
+    ("02", "Hash Generator", "Crypto", "Generate common cryptographic digests"),
     ("03", "Base64 Toolkit", "Encoding", "Encode and decode Base64"),
     ("04", "JWT Decoder", "Encoding", "Decode JWT header and payload"),
-    ("05", "Password Strength", "Crypto", "Estimate password entropy"),
+    ("05", "Password Strength", "Crypto", "Estimate password entropy and composition"),
     ("00", "Back", "System", "Return to main menu"),
 ]
 
@@ -222,8 +208,8 @@ CRYPTO_TOOLS = {
 
 
 FILE_ROWS = [
-    ("01", "File Hash", "Files", "Calculate file checksums"),
-    ("02", "EXIF Viewer", "Files", "Display image EXIF metadata"),
+    ("01", "File Hash", "Files", "Calculate file checksums and metadata"),
+    ("02", "EXIF Viewer", "Files", "Display image metadata"),
     ("00", "Back", "System", "Return to main menu"),
 ]
 

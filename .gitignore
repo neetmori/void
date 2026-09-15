@@ -1,0 +1,25 @@
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Local logs
+logs/*.json
+logs/*.log
+
+# Local environments
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Local credentials / API configuration
+api_keys.json
+*.pem
+*.key
+
+# Editor / OS metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

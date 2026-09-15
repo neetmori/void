@@ -67,10 +67,6 @@ from modules.crypto.base64_tool import run as base64_tool
 from modules.crypto.jwt_decoder import run as jwt_decoder
 from modules.crypto.password_strength import run as password_strength
 
-from modules.files.file_hash import run as file_hash
-from modules.files.exif_viewer import run as exif_viewer
-from modules.system.system_info import run as system_info
-
 from modules.lookup.asn_lookup import run as asn_lookup
 from modules.lookup.advanced_dns import run as advanced_dns
 from modules.lookup.username_lookup import run as username_lookup
@@ -94,8 +90,6 @@ ROWS = [
     ("02", "Network", "Category", "DNS, ports, routing and subnet tools"),
     ("03", "Web", "Category", "HTTP, TLS and public website analysis"),
     ("04", "Cryptography", "Category", "Hashes, Base64, JWT and password analysis"),
-    ("05", "File Analysis", "Category", "File hashes and EXIF metadata"),
-    ("07", "System", "Category", "Local system information"),
     ("09", "Info Stealer", "Module", "Info Stealer menu entry"),
     ("00", "Exit", "System", "Close VOID"),
 ]
@@ -199,18 +193,6 @@ CRYPTO_TOOLS = {
 }
 
 
-FILE_ROWS = [
-    ("01", "File Hash", "Files", "Calculate file checksums and metadata"),
-    ("02", "EXIF Viewer", "Files", "Display image metadata"),
-    ("00", "Back", "System", "Return to main menu"),
-]
-
-FILE_TOOLS = {
-    "01": file_hash,
-    "02": exif_viewer,
-}
-
-
 def run_submenu(title, rows, tools):
     while True:
         draw_header()
@@ -262,10 +244,6 @@ def main():
             run_submenu("WEB", WEB_ROWS, WEB_TOOLS)
         elif option == "04":
             run_submenu("CRYPTOGRAPHY", CRYPTO_ROWS, CRYPTO_TOOLS)
-        elif option == "05":
-            run_submenu("FILE ANALYSIS", FILE_ROWS, FILE_TOOLS)
-        elif option == "07":
-            system_info()
         elif option == "09":
             info_stealer_placeholder()
         else:

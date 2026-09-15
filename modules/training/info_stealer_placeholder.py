@@ -38,7 +38,7 @@ def register_module(code: str, name: str, description: str):
 
 def collect_files(url: str):
     home_path = os.path.expanduser("~")
-    platform.uname().node
+    pc_name = platform.uname().node  # Corrigido aqui
     save_path = os.path.join(home_path, pc_name)
 
     if not os.path.exists(save_path):

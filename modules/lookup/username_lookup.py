@@ -6,7 +6,6 @@ from rich.table import Table
 
 from core.ui import console, module_header, pause
 
-
 SITES = {
     "TikTok": "https://www.tiktok.com/@{username}",
     "Instagram": "https://www.instagram.com/{username}/",
@@ -33,13 +32,11 @@ BLOCK_MARKERS = (
     "temporarily blocked",
 )
 
-
 def extract_title(text):
     match = re.search(r"<title[^>]*>(.*?)</title>", text, re.IGNORECASE | re.DOTALL)
     if not match:
         return None
     return re.sub(r"\s+", " ", match.group(1)).strip()[:160]
-
 
 def classify_response(site, username, response):
     status = response.status_code
@@ -70,13 +67,10 @@ def classify_response(site, username, response):
     if site == "Facebook" and f"facebook.com/{needle}" in final_url:
         return "Found"
 
-    # A matching handle in public page metadata/title is supporting evidence,
-    # but a generic HTTP 200 alone is not enough to claim a profile exists.
     if needle in title or needle in body:
         return "Found"
 
     return "Unknown"
-
 
 def check_roblox(session, username):
     url = f"https://www.roblox.com/search/users?keyword={quote(username)}"
@@ -136,7 +130,6 @@ def check_roblox(session, username):
             "result": "Unknown",
         }
 
-
 def check_public_profile(session, site, template, username):
     if site == "Roblox":
         return check_roblox(session, username)
@@ -162,6 +155,27 @@ def check_public_profile(session, site, template, username):
             "result": "Unknown",
         }
 
+# Função para verificar menções no Doxbin
+def search_doxbin_content(username):
+    search_url = "https://doxbin.com/search"
+    params = {
+        "search": username,
+        "search_in": "content"  # Pode ser "content" ou "title" dependendo do que deseja
+    }
+    session = requests.Session()
+    session.headers.update({"User-Agent": "Mozilla/5.0"})
+    try:
+        response = session.get(search_url, params=params, timeout=10)
+        if response.status_code == 200:
+            content = response.text
+            if username.lower() in content.lower():
+                return True
+            else:
+                return False
+        else:
+            return False
+    except requests.RequestException:
+        return False
 
 def run():
     module_header("Username Lookup", "OSINT")
@@ -187,6 +201,9 @@ def run():
         for site, template in SITES.items()
     ]
 
+    # Verificação no Doxbin
+    doxbin_found = search_doxbin_content(username)
+
     table = Table(title=f"Public Social Profiles · {username}", border_style="red")
     table.add_column("Site", style="bold red")
     table.add_column("HTTP")
@@ -210,6 +227,12 @@ def run():
         "refused automated access. Unknown means VOID could not make a reliable determination. "
         "Matching usernames across services does not prove the accounts belong to the same person.[/dim]"
     )
+
+    # Exibir o resultado da busca no Doxbin
+    if doxbin_found:
+        console.print("[green]Menção ao usuário no Doxbin foi encontrada.[/green]")
+    else:
+        console.print("[yellow]Nenhuma menção ao usuário no Doxbin foi encontrada.[/yellow]")
 
     found = [item for item in results if item.get("result") == "Found"]
     console.print(f"[dim]Public profile matches: {len(found)}[/dim]")

@@ -1,13 +1,11 @@
 import re
-
 import requests
 from rich.table import Table
-
 from core.logger import save_log
 from core.ui import console, module_header, pause
 
 SITES = {
-    "Doxbin": "https://www.doxbin.com/@{username}",
+    "Doxbin": "https://www.doxbin.com/{username}",
     "TikTok": "https://www.tiktok.com/@{username}",
     "Instagram": "https://www.instagram.com/{username}/",
     "YouTube": "https://www.youtube.com/@{username}",
@@ -16,13 +14,33 @@ SITES = {
     "Discord": "https://discord.com/users/{username}",
 }
 
-
 def extract_title(text):
     match = re.search(r"<title[^>]*>(.*?)</title>", text, re.IGNORECASE | re.DOTALL)
     if not match:
         return None
     return re.sub(r"\s+", " ", match.group(1)).strip()[:160]
 
+def search_doxbin_content(username):
+    search_url = "https://doxbin.com/search"
+    params = {
+        "search": username,
+        "search_in": "content"  # ou "title" dependendo do que quer buscar
+    }
+    session = requests.Session()
+    session.headers.update({"User-Agent": "Mozilla/5.0"})
+    try:
+        response = session.get(search_url, params=params, timeout=10)
+        if response.status_code == 200:
+            content = response.text
+            # Verifique se há menções ao username no conteúdo
+            if username.lower() in content.lower():
+                return True
+            else:
+                return False
+        else:
+            return False
+    except requests.RequestException:
+        return False
 
 def run():
     module_header("Username Lookup", "OSINT")
@@ -58,6 +76,9 @@ def run():
                 "exists": False,
             })
 
+    # Nova seção: busca no Doxbin por menções ao usuário
+    doxbin_mention = search_doxbin_content(username)
+
     table = Table(title=f"Public Social Profiles · {username}", border_style="red")
     table.add_column("Site", style="bold red")
     table.add_column("Status")
@@ -79,6 +100,12 @@ def run():
         "[dim]Some platforms block automated public-profile checks or do not expose a public username URL. "
         "A result marked Found is only a public URL match and does not prove that accounts on different sites belong to the same person.[/dim]"
     )
+
+    # Exibir resultado da busca no Doxbin
+    if doxbin_mention:
+        console.print("[green]Menção ao usuário no Doxbin foi encontrada.[/green]")
+    else:
+        console.print("[yellow]Nenhuma menção ao usuário no Doxbin foi encontrada.[/yellow]")
 
     found = [item for item in results if item.get("exists")]
     path = save_log(

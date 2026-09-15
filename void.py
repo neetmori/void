@@ -9,7 +9,6 @@ REQUIRED_PACKAGES = {
     "rich": "rich",
     "requests": "requests",
     "dns": "dnspython",
-    "PIL": "Pillow",
     "phonenumbers": "phonenumbers",
 }
 

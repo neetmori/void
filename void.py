@@ -60,7 +60,6 @@ from modules.web.robots_analyzer import run as robots_analyzer
 from modules.web.sitemap_finder import run as sitemap_finder
 from modules.web.url_parser import run as url_parser
 from modules.web.subdomain_resolver import run as subdomain_resolver
-from modules.web.local_stress import run as local_stress
 
 from modules.crypto.hash_analyzer import run as hash_analyzer
 from modules.crypto.hash_generator import run as hash_generator
@@ -96,7 +95,6 @@ ROWS = [
     ("03", "Web", "Category", "HTTP, TLS and public website analysis"),
     ("04", "Cryptography", "Category", "Hashes, Base64, JWT and password analysis"),
     ("05", "File Analysis", "Category", "File hashes and EXIF metadata"),
-    ("06", "Local Testing", "Category", "Localhost-only testing tools"),
     ("07", "System", "Category", "Local system information"),
     ("09", "Info Stealer", "Module", "Info Stealer menu entry"),
     ("00", "Exit", "System", "Close VOID"),
@@ -266,8 +264,6 @@ def main():
             run_submenu("CRYPTOGRAPHY", CRYPTO_ROWS, CRYPTO_TOOLS)
         elif option == "05":
             run_submenu("FILE ANALYSIS", FILE_ROWS, FILE_TOOLS)
-        elif option == "06":
-            local_stress()
         elif option == "07":
             system_info()
         elif option == "09":

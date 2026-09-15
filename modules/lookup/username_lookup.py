@@ -7,6 +7,7 @@ from core.logger import save_log
 from core.ui import console, module_header, pause
 
 SITES = {
+    "Doxbin": "https://www.doxbin.com/@{username}",
     "TikTok": "https://www.tiktok.com/@{username}",
     "Instagram": "https://www.instagram.com/{username}/",
     "YouTube": "https://www.youtube.com/@{username}",

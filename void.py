@@ -90,7 +90,7 @@ ROWS = [
     ("02", "Network", "Category", "DNS, ports, routing and subnet tools"),
     ("03", "Web", "Category", "HTTP, TLS and public website analysis"),
     ("04", "Cryptography", "Category", "Hashes, Base64, JWT and password analysis"),
-    ("09", "Info Stealer", "Module", "Info Stealer menu entry"),
+    ("05", "Info Stealer", "Module", "Disabled Info Stealer structure"),
     ("00", "Exit", "System", "Close VOID"),
 ]
 
@@ -244,7 +244,7 @@ def main():
             run_submenu("WEB", WEB_ROWS, WEB_TOOLS)
         elif option == "04":
             run_submenu("CRYPTOGRAPHY", CRYPTO_ROWS, CRYPTO_TOOLS)
-        elif option == "09":
+        elif option == "05":
             info_stealer_placeholder()
         else:
             console.print("[bold red][!] Unknown command.[/bold red]")

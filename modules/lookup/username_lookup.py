@@ -4,7 +4,6 @@ from urllib.parse import quote
 import requests
 from rich.table import Table
 
-from core.logger import save_log
 from core.ui import console, module_header, pause
 
 
@@ -213,14 +212,5 @@ def run():
     )
 
     found = [item for item in results if item.get("result") == "Found"]
-    path = save_log(
-        "username_lookup",
-        username,
-        {
-            "found_count": len(found),
-            "results": results,
-        },
-    )
     console.print(f"[dim]Public profile matches: {len(found)}[/dim]")
-    console.print(f"[dim]Log saved to {path}[/dim]")
     pause()

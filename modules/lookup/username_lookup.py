@@ -155,28 +155,6 @@ def check_public_profile(session, site, template, username):
             "result": "Unknown",
         }
 
-# Função para verificar menções no Doxbin
-def search_doxbin_content(username):
-    search_url = "https://doxbin.com/search"
-    params = {
-        "search": username,
-        "search_in": "content"  # Pode ser "content" ou "title" dependendo do que deseja
-    }
-    session = requests.Session()
-    session.headers.update({"User-Agent": "Mozilla/5.0"})
-    try:
-        response = session.get(search_url, params=params, timeout=10)
-        if response.status_code == 200:
-            content = response.text
-            if username.lower() in content.lower():
-                return True
-            else:
-                return False
-        else:
-            return False
-    except requests.RequestException:
-        return False
-
 def run():
     module_header("Username Lookup", "OSINT")
     username = console.input("[bold white]Username:[/bold white] ").strip().lstrip("@")
@@ -201,9 +179,6 @@ def run():
         for site, template in SITES.items()
     ]
 
-    # Verificação no Doxbin
-    doxbin_found = search_doxbin_content(username)
-
     table = Table(title=f"Public Social Profiles · {username}", border_style="red")
     table.add_column("Site", style="bold red")
     table.add_column("HTTP")
@@ -227,12 +202,6 @@ def run():
         "refused automated access. Unknown means VOID could not make a reliable determination. "
         "Matching usernames across services does not prove the accounts belong to the same person.[/dim]"
     )
-
-    # Exibir o resultado da busca no Doxbin
-    if doxbin_found:
-        console.print("[green]Menção ao usuário no Doxbin foi encontrada.[/green]")
-    else:
-        console.print("[yellow]Nenhuma menção ao usuário no Doxbin foi encontrada.[/yellow]")
 
     found = [item for item in results if item.get("result") == "Found"]
     console.print(f"[dim]Public profile matches: {len(found)}[/dim]")
